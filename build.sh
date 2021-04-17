@@ -18,7 +18,7 @@ cppflags="-Wall -I$srcdir"
 ld="emcc"
 ldflags="-lm"
 
-bin="build/scidown-wasm.html"
+bin="build/scidown-wasm.js"
 
 # zusätzliche Files
 objfiles="charter/build/charter-wasm.a"
