@@ -24,8 +24,6 @@ bin="build/scidown-wasm.js"
 objfiles="charter/build/charter-wasm.a"
 sourcefiles="bin/scidown.c"
 
-mkdir "$objdir" >/dev/null 2>&1
-
 execute_echo() {
     echo $ $@
     $@
@@ -37,6 +35,10 @@ execute_echo() {
         exit $exitcode
     fi
 }
+
+# in den Ordner des Skriptes springen
+cd "$(dirname "$0")"
+mkdir "$objdir" >/dev/null 2>&1
 
 if [ "$1" == "clean" ]; then
     echo "Cleaning up..."
