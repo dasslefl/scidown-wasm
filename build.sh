@@ -18,10 +18,10 @@ cppflags="-Wall -I$srcdir"
 ld="emcc"
 ldflags="-lm"
 
-bin="build/scidown-wasm.js"
+bin="build/scidown-wasm.html"
 
 # zusätzliche Files
-objfiles=""
+objfiles="charter/build/charter-wasm.a"
 sourcefiles="bin/scidown.c"
 
 mkdir "$objdir" >/dev/null 2>&1
@@ -38,15 +38,17 @@ execute_echo() {
     fi
 }
 
-# Charter kompilieren
-execute_echo charter/build.sh
-
 if [ "$1" == "clean" ]; then
     echo "Cleaning up..."
     execute_echo rm -r "$objdir"
     execute_echo rm -f "$bin"
+    # Charter cleanen
+    execute_echo charter/build.sh clean
     exit 0
 fi
+
+# Charter kompilieren
+execute_echo charter/build.sh archive
 
 # C-Dateien
 sourcefiles="$sourcefiles $(find "$srcdir" -name "*.c" -printf "%p ")"

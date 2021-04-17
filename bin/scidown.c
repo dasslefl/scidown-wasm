@@ -384,7 +384,6 @@ main(int argc, char **argv)
 {
 	struct option_data data;
 	clock_t t1, t2;
-	FILE *file = stdin;
 	hoedown_buffer *ib, *ob;
 	hoedown_renderer *renderer = NULL;
 	void (*renderer_free)(hoedown_renderer *) = NULL;
@@ -407,24 +406,13 @@ main(int argc, char **argv)
 	if (data.done) return 0;
 	if (!argc) return 1;
 
-	/* Open input file, if needed */
-	if (data.filename) {
-		file = fopen(data.filename, "r");
-		if (!file) {
-			fprintf(stderr, "Unable to open input file \"%s\": %s\n", data.filename, strerror(errno));
-			return 5;
-		}
-	}
-
 	/* Read everything */
 	ib = hoedown_buffer_new(data.iunit);
 
-	if (hoedown_buffer_putf(ib, file)) {
-		fprintf(stderr, "I/O errors found while reading input.\n");
+	if (hoedown_buffer_putf(ib, stdin)) {
+		fprintf(stderr, "No input file piped in.\n");
 		return 5;
 	}
-
-	if (file != stdin) fclose(file);
 
 	/* Create the renderer */
 	if (data.renderer == RENDERER_HTML)
@@ -440,9 +428,9 @@ main(int argc, char **argv)
 
 	ext_definition ext = {NULL, NULL};
 	if (data.renderer == RENDERER_HTML) {
-		ext.extra_header = "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha2/katex.min.css\" crossorigin=\"anonymous\">\n"
-							"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha2/katex.min.js\" crossorigin=\"anonymous\"></script>\n"
-							"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha2/contrib/auto-render.min.js\" crossorigin=\"anonymous\"></script>\n";
+		ext.extra_header = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.css\" crossorigin=\"anonymous\">\n"
+							"<script src=\"https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.js\" crossorigin=\"anonymous\"></script>\n"
+							"<script src=\"https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/contrib/auto-render.min.js\" crossorigin=\"anonymous\"></script>\n";
 		ext.extra_closing = "<script>renderMathInElement(document.body);</script>\n";
 	}
 	document = hoedown_document_new(renderer, data.extensions,&ext, NULL, data.max_nesting);

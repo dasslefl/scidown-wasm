@@ -121,6 +121,8 @@ rndr_blockcode(hoedown_buffer *ob, const hoedown_buffer *text, const hoedown_buf
 		}
 		return;
 	}
+
+	/* GNUPlot deaktivieren, funktioniert nicht im Browser
 	if (lang &&  (state->flags & SCIDOWN_RENDER_GNUPLOT) != 0 && hoedown_buffer_eqs(lang, "gnuplot"))
 	{
 		if (text && text->size){
@@ -154,6 +156,8 @@ rndr_blockcode(hoedown_buffer *ob, const hoedown_buffer *text, const hoedown_buf
 
 		return;
 	}
+	*/
+
 	if (lang && (state->flags & SCIDOWN_RENDER_MERMAID) != 0 && hoedown_buffer_eqs(lang, "mermaid") != 0){
 		if (text){
 	        HOEDOWN_BUFPUTSL(ob, "<div class=\"mermaid\">");
