@@ -7,8 +7,8 @@
 
 #include "escape.h"
 
-#include "charter/src/parser.h"
-#include "charter/src/renderer.h"
+#include "../charter/src/parser.h"
+#include "../charter/src/renderer.h"
 
 #define USE_XHTML(opt) (opt->flags & SCIDOWN_RENDER_USE_XHTML)
 #define MAX_FILE_SIZE 1000000
