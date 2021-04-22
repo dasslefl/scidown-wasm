@@ -16,7 +16,7 @@ cflags="-Wall -I$srcdir"
 cppflags="-Wall -I$srcdir"
 
 ld="emcc"
-ldflags="-lm"
+ldflags="-lm --pre-js preload.js -lidbfs.js -lnodefs.js"
 
 bin="build/scidown-wasm.js"
 
