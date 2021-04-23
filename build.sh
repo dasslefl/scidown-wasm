@@ -12,17 +12,17 @@ objdir="build"
 cc="emcc"
 cppc="em++"
 
-cflags="-Wall -I$srcdir"
-cppflags="-Wall -I$srcdir"
+cflags="$cflags -Wall -I$srcdir"
+cppflags="$cflags -Wall -I$srcdir"
 
 ld="emcc"
-ldflags="-lm --pre-js preload.js -lidbfs.js -lnodefs.js"
+ldflags="$ldflags -lm --pre-js preload.js -lidbfs.js -lnodefs.js"
 
 bin="build/scidown-wasm.js"
 
 # zusätzliche Files
 objfiles="charter/build/charter-wasm.a"
-sourcefiles="bin/scidown.c"
+sourcefiles="$sourcefiles bin/scidown.c"
 
 execute_echo() {
     echo $ $@
