@@ -4,7 +4,12 @@
 
 #include "common.h"
 #include "utils.h"
+#include "emscripten_polyfill.h"
+
 #include <time.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 
 /* FEATURES INFO / DEFAULTS */
@@ -378,6 +383,10 @@ parse_argument(int argn, char *arg, int is_forced, void *opaque)
 
 
 /* MAIN LOGIC */
+// Puffer um Ausgabe zu speichen
+static hoedown_buffer *ob = NULL;
+// Standalone-Modus: Puffer automatisch free
+static bool standalone = true;
 
 int
 main(int argc, char **argv)
@@ -385,7 +394,7 @@ main(int argc, char **argv)
 	struct option_data data;
 	clock_t t1, t2;
 	FILE *file = stdin;
-	hoedown_buffer *ib, *ob;
+	hoedown_buffer *ib;
 	hoedown_renderer *renderer = NULL;
 	void (*renderer_free)(hoedown_renderer *) = NULL;
 	hoedown_document *document;
@@ -456,13 +465,16 @@ main(int argc, char **argv)
 	hoedown_document_free(document);
 	renderer_free(renderer);
 
-	/* Write the result to stdout */
-	(void)fwrite(ob->data, 1, ob->size, stdout);
-	hoedown_buffer_free(ob);
+	/* Write the result to stdout when running standalone*/
+	if(standalone) {
+		fwrite(ob->data, 1, ob->size, stdout);
+		hoedown_buffer_free(ob);
+		ob = NULL;
 
-	if (ferror(stdout)) {
-		fprintf(stderr, "I/O errors found while writing output.\n");
-		return 5;
+		if (ferror(stdout)) {
+			fprintf(stderr, "I/O errors found while writing output.\n");
+			return 5;
+		}
 	}
 
 	/* Show rendering time */
@@ -482,4 +494,49 @@ main(int argc, char **argv)
 	}
 
 	return 0;
+}
+
+EMSCRIPTEN_KEEPALIVE 
+int scidown_start_render(char * file) {
+	
+	if(file == NULL) {
+		fprintf(stderr, "No input file specified.\n");
+		return -1;
+	}
+
+	standalone = false;
+	
+	char * args[] = { "./this.program", file };
+	return main(2, args);
+}
+
+EMSCRIPTEN_KEEPALIVE 
+int scidown_get_output_size() {
+	if(ob == NULL) {
+		fprintf(stderr, "No output data available.\n");
+		return 0;
+	}
+
+	return ob->size;
+}
+
+EMSCRIPTEN_KEEPALIVE 
+int scidown_get_output_buffer() {
+	if(ob == NULL) {
+		fprintf(stderr, "No output data available.\n");
+		return 0;
+	}
+
+	return (int) ob->data;
+}
+
+EMSCRIPTEN_KEEPALIVE 
+void scidown_free() {
+	if(ob == NULL) {
+		fprintf(stderr, "No output data available.\n");
+		return;
+	}
+
+	hoedown_buffer_free(ob);
+	ob = NULL;
 }

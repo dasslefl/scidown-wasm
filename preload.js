@@ -8,6 +8,12 @@ Module["noInitialRun"] = true;
 
 Module["onRuntimeInitialized"] = function() {
 
+    // Methoden exportieren
+    Module["scidownStartRender"] = Module.cwrap('scidown_start_render', 'number', ['string']);
+    Module["scidownGetOutputSize"] = Module.cwrap('scidown_get_output_size', 'number', ['']);
+    Module["scidownGetOutputBuffer"] = Module.cwrap('scidown_get_output_buffer', 'number', ['']);
+    Module["scidownFree"] = Module.cwrap('scidown_free', 'void', ['']);
+
     if(is_node) {
         // NodeFS einhängen, main aufrufen
         FS.mkdir("/data");

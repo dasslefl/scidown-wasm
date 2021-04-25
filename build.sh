@@ -4,6 +4,8 @@
 # 2020 Florian Daßler (florian.dassler@s2020.tu-chemnitz.de)
 # Rev 4
 
+# wenn standalone build dann nodefs implementieren
+ldflags=${ldflags:-"-lnodefs.js"}
 
 # Configuration
 srcdir="src"
@@ -16,7 +18,7 @@ cflags="$cflags -Wall -I$srcdir"
 cppflags="$cflags -Wall -I$srcdir"
 
 ld="emcc"
-ldflags="$ldflags -lm --pre-js preload.js"
+ldflags="$ldflags -lm --pre-js preload.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']"
 
 bin="build/scidown-wasm.js"
 
