@@ -13,6 +13,7 @@ Module["onRuntimeInitialized"] = function() {
     Module["scidownGetOutputSize"] = Module.cwrap('scidown_get_output_size', 'number', ['']);
     Module["scidownGetOutputBuffer"] = Module.cwrap('scidown_get_output_buffer', 'number', ['']);
     Module["scidownFree"] = Module.cwrap('scidown_free', 'void', ['']);
+    Module["scidownGetRuntime"] = Module.cwrap('scidown_get_runtime', 'number', ['']);
 
     if(is_node) {
         // NodeFS einhängen, main aufrufen

@@ -387,6 +387,8 @@ parse_argument(int argn, char *arg, int is_forced, void *opaque)
 static hoedown_buffer *ob = NULL;
 // Standalone-Modus: Puffer automatisch free
 static bool standalone = true;
+// Laufzeit des Renderings in ms
+static int runtime = -1;
 
 int
 main(int argc, char **argv)
@@ -478,20 +480,23 @@ main(int argc, char **argv)
 	}
 
 	/* Show rendering time */
+	double elapsed;
+
+	if (t1 == ((clock_t) -1) || t2 == ((clock_t) -1)) {
+		fprintf(stderr, "Failed to get the time.\n");
+		elapsed = -1;
+	}
+
+	elapsed = (double)(t2 - t1) / CLOCKS_PER_SEC;
+	runtime = elapsed * 1000;
+
 	if (data.show_time) {
-		double elapsed;
-
-		if (t1 == ((clock_t) -1) || t2 == ((clock_t) -1)) {
-			fprintf(stderr, "Failed to get the time.\n");
-			return 1;
-		}
-
-		elapsed = (double)(t2 - t1) / CLOCKS_PER_SEC;
 		if (elapsed < 1)
 			fprintf(stderr, "Time spent on rendering: %7.2f ms.\n", elapsed*1e3);
 		else
 			fprintf(stderr, "Time spent on rendering: %6.3f s.\n", elapsed);
 	}
+	
 
 	return 0;
 }
@@ -528,6 +533,11 @@ int scidown_get_output_buffer() {
 	}
 
 	return (int) ob->data;
+}
+
+EMSCRIPTEN_KEEPALIVE 
+int scidown_get_runtime() {
+	return runtime;
 }
 
 EMSCRIPTEN_KEEPALIVE 

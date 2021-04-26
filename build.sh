@@ -14,8 +14,8 @@ objdir="build"
 cc="emcc"
 cppc="em++"
 
-cflags="$cflags -Wall -I$srcdir"
-cppflags="$cflags -Wall -I$srcdir"
+cflags="$cflags -Wall -I$srcdir -O3"
+cppflags="$cflags -Wall -I$srcdir -O3"
 
 ld="emcc"
 ldflags="$ldflags -lm --pre-js preload.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']"
