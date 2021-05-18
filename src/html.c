@@ -102,22 +102,21 @@ rndr_blockcode(hoedown_buffer *ob, const hoedown_buffer *text, const hoedown_buf
 	if (ob->size) hoedown_buffer_putc(ob, '\n');
 	hoedown_html_renderer_state *state = data->opaque;
 	if (lang && (state->flags & SCIDOWN_RENDER_CHARTER) != 0 && hoedown_buffer_eqs(lang, "charter") != 0){
-		if (text){
-
-			char * copy = malloc((text->size + 1)*sizeof(char));
-			memset(copy, 0, text->size+1);
+		if (text) {
+			// Text in Puffer knallen
+			char * copy = malloc((text->size + 1) * sizeof(char));
+			memset(copy, 0, text->size + 1);
 			memcpy(copy, text->data, text->size);
 
 			chart * c =  parse_chart(copy);
 			char * svg = chart_to_svg(c);
 
-			int n = strlen(svg);
-			hoedown_buffer_printf(ob, svg, n);
+			// Original war hier printf, wurde durch Puts ersetzt
+			hoedown_buffer_puts(ob, svg);
 
 			free(copy);
 			chart_free(c);
 			free(svg);
-
 		}
 		return;
 	}
