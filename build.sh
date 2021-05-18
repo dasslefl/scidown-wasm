@@ -18,7 +18,7 @@ cflags="$cflags -Wall -I$srcdir -O3"
 cppflags="$cflags -Wall -I$srcdir -O3"
 
 ld="emcc"
-ldflags="$ldflags -lm --pre-js preload.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap']"
+ldflags="$ldflags -lm -lidbfs.js --pre-js preload.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap','FS','IDBFS']"
 
 bin="build/scidown-wasm.js"
 
