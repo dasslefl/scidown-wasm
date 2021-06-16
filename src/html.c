@@ -786,7 +786,7 @@ rndr_pagebreak(hoedown_buffer *ob)
 static void
 rndr_abstract(hoedown_buffer *ob){
 	hoedown_buffer_puts(ob, "<div id=\"abstract\" class=\"abstract\">\n");
-	hoedown_buffer_puts(ob, "<h2>Abstract</h2>\n");
+	hoedown_buffer_puts(ob, "<h2>Versuchsbeschreibung</h2>\n");
 }
 
 static void
@@ -846,7 +846,7 @@ static void rnrd_close_float(hoedown_buffer *ob, float_args args, const hoedown_
 		{
 		case FIGURE:
 			state->counter.figure++;
-			hoedown_buffer_printf(ob,  "Figure %u.</b> ", state->counter.figure);
+			hoedown_buffer_printf(ob,  "Darstellung %u.</b> ", state->counter.figure);
 			break;
 		case LISTING:
 			state->counter.listing++;
@@ -854,7 +854,7 @@ static void rnrd_close_float(hoedown_buffer *ob, float_args args, const hoedown_
 			break;
 		case TABLE:
 			state->counter.table++;
-			hoedown_buffer_printf(ob,  "Table %u.</b> ", state->counter.table);
+			hoedown_buffer_printf(ob,  "Tabelle %u.</b> ", state->counter.table);
 			break;
 		default:
 			break;
@@ -911,7 +911,7 @@ rndr_toc_entry(hoedown_buffer *ob, toc * tree, int * chapter, int * section, int
 static void
 rndr_toc(hoedown_buffer *ob, toc * tree, int numbering)
 {
-	hoedown_buffer_puts(ob, "<div class=\"toc_container\">\n<h2 class=\"toc_header\">Table of Contents</h2>\n<ul class=\"toc_list\">\n");
+	hoedown_buffer_puts(ob, "<div class=\"toc_container\">\n<h2 class=\"toc_header\">Inhaltsverzeichnis</h2>\n<ul class=\"toc_list\">\n");
 	int cpt=0, sct=0, sbs=0;
 	rndr_toc_entry(ob, tree, &cpt, &sct, &sbs, numbering);
 	hoedown_buffer_puts(ob, "</ul></div>\n");
